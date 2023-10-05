@@ -5,13 +5,19 @@ import json
 # タイトルの表示
 st.title('開発ルール設定アンケート')
 
-# 項目と選択肢を辞書として定義
-questions = {
-    "コメントの詳細度": ["詳細", "普通", "簡潔"],
-    # 他の項目も同様に追加してください
-}
+# dev-rules-qa.jsonからNo、質問、回答選択肢の3つを抽出し、その内容でquesionsを修正
+with open('dev-rules-qa.json', 'r') as f:
+    dev_rules = json.load(f)
+    questions = {}
+    for rule in dev_rules:
+        questions[rule['question']] = rule['answer_options']
 # ユーザーの回答を保存する辞書
 answers = {}
+
+# 各質問に対して選択肢を表示し、ユーザーの選択を保存
+for question, options in questions.items():
+    answer = st.selectbox(question, options)
+    answers[question] = answer
 
 
 def to_markdown(answers):
@@ -20,11 +26,6 @@ def to_markdown(answers):
         markdown_text += f"## {question}\n- {answer}\n\n"
     return markdown_text
 
-
-# 各質問に対して選択肢を表示し、ユーザーの選択を保存
-for question, options in questions.items():
-    answer = st.selectbox(question, options)
-    answers[question] = answer
 
 # 「結果を表示」ボタンがクリックされたら、選択された回答を表示
 if st.button('結果を表示'):
