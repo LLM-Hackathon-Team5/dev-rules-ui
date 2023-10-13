@@ -10,14 +10,14 @@ with open('dev-rules-qa.json', 'r') as f:
     dev_rules = json.load(f)
     questions = {}
     for rule in dev_rules:
-        questions[rule['question']] = rule['answer_options']
+        questions[rule['question']] = rule['answer-options']
 # ユーザーの回答を保存する辞書
 answers = {}
 
 # 各質問に対して選択肢を表示し、ユーザーの選択を保存
 for question, options in questions.items():
     answer = st.selectbox(question, options)
-    answers[question] = answer.split('. ', 1)[-1]  # 番号を除去
+    answers[question] = answer
 
 
 def to_markdown(answers):
@@ -39,20 +39,3 @@ if st.button('結果を表示'):
         file_name="development_rules.md",
         mime="text/markdown",
     )
-    # 回答をJSONL形式でファイルとしてダウンロード可能にする
-    jsonl_data = "\n".join([json.dumps({question: answer}, ensure_ascii=False) for question, answer in answers.items()])
-    st.download_button(
-        label="結果を「.jsonl」ファイルでダウンロード",
-        data=jsonl_data.encode(),
-        file_name="development_rules.jsonl",
-        mime="application/json",
-    )
-    # 回答をJSON形式でファイルとしてダウンロード可能にする
-    json_data = json.dumps(answers, ensure_ascii=False, indent=4)
-    st.download_button(
-        label="結果を「.json」ファイルでダウンロード",
-        data=json_data.encode(),
-        file_name="development_rules.json",
-        mime="application/json",
-    )
-
