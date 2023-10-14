@@ -40,7 +40,7 @@ if st.button('結果を表示'):
         mime="text/markdown",
     )
     # 回答をJSONL形式でファイルとしてダウンロード可能にする
-    jsonl_data = "\n".join([json.dumps({question: answer}, ensure_ascii=False) for question, answer in answers.items()])
+    jsonl_data = "\n".join([json.dumps({"input_text": question, "output_text": answer}, ensure_ascii=False) for question, answer in answers.items()])
     st.download_button(
         label="結果を「.jsonl」ファイルでダウンロード",
         data=jsonl_data.encode(),
